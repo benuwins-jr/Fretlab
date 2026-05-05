@@ -1,66 +1,100 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import Script from "next/script";
+
+declare global {
+  interface Window {
+    toggleSection: (section: string) => void;
+  }
+}
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
+    <>
+      <div id="app">
+        <div className="top-row">
+          <div className="card" id="selector-card">
+            <div className="section-label">Root note</div>
+            <div className="pill-row" id="root-pills" style={{ marginBottom: 16 }}></div>
+            <div
+              className="section-toggle"
+              onClick={() => window.toggleSection?.("chords")}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
+              <span className="section-label" style={{ marginBottom: 0 }}>
+                Chord type
+              </span>
+              <span className="toggle-arrow" id="chords-arrow">
+                {"▼"}
+              </span>
+            </div>
+            <div
+              className="section-content"
+              id="chords-content"
+              style={{ paddingTop: 8, paddingBottom: 8, maxHeight: 500 }}
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <div id="chord-type-groups"></div>
+            </div>
+            <div className="group-divider" style={{ margin: "8px 0" }}></div>
+            <div
+              className="section-toggle"
+              onClick={() => window.toggleSection?.("scales")}
+            >
+              <span className="section-label" style={{ marginBottom: 0 }}>
+                Scales
+              </span>
+              <span className="toggle-arrow collapsed" id="scales-arrow">
+                {"▼"}
+              </span>
+            </div>
+            <div
+              className="section-content collapsed"
+              id="scales-content"
+              style={{ paddingTop: 8, paddingBottom: 8, maxHeight: 500 }}
+            >
+              <div id="scale-type-groups"></div>
+            </div>
+          </div>
+          <div className="card" id="fretboard-card">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: 8,
+              }}
+            >
+              <span className="section-label" style={{ marginBottom: 0 }}>
+                Fretboard
+              </span>
+              <div style={{ display: "flex", gap: 4 }} id="hand-toggle"></div>
+            </div>
+            <div className="badge-row" id="badge-row" style={{ minHeight: 32 }}></div>
+            <div id="chord-thumbnails"></div>
+            <div className="fretboard-scroll" id="fretboard-container"></div>
+            <div className="legend" id="legend"></div>
+          </div>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="card">
+          <div className="section-label" id="key-context-label">
+            Key context
+          </div>
+          <div className="info-grid">
+            <div className="info-card">
+              <div className="info-title">Chords in key</div>
+              <div id="diatonic-chords"></div>
+            </div>
+            <div className="info-card">
+              <div className="info-title">Circle of fifths</div>
+              <div id="circle-of-fifths" style={{ textAlign: "center" }}></div>
+            </div>
+            <div className="info-card">
+              <div className="info-title">Pentatonic scales</div>
+              <div id="pentatonic-panel"></div>
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
+      </div>
+      <Script src="/guitar-app.js" strategy="afterInteractive" />
+    </>
   );
 }
